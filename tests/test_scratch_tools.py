@@ -14,7 +14,9 @@ import pytest
 
 # Point to project root so imports resolve
 sys.path.insert(0, str(Path(__file__).parent.parent))
-sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts")
+)
 
 import tools.scratch_tools as _st_mod
 
@@ -49,6 +51,7 @@ def patch_output_dir(tmp_path, monkeypatch):
 # list_projects
 # ---------------------------------------------------------------------------
 
+
 class TestListProjects:
     def test_empty_output(self, tmp_path):
         result = json.loads(_call(_st_mod.list_projects))
@@ -76,6 +79,7 @@ class TestListProjects:
 # load_spec
 # ---------------------------------------------------------------------------
 
+
 class TestLoadSpec:
     def test_load_existing(self, tmp_path):
         spec = {"name": "My Game", "sprites": []}
@@ -96,6 +100,7 @@ class TestLoadSpec:
 # ---------------------------------------------------------------------------
 # save_spec
 # ---------------------------------------------------------------------------
+
 
 class TestSaveSpec:
     def test_save_valid_json(self, tmp_path):
@@ -124,6 +129,7 @@ class TestSaveSpec:
 # inspect_sb3
 # ---------------------------------------------------------------------------
 
+
 class TestInspectSb3:
     def _project(self) -> dict:
         return {
@@ -135,7 +141,9 @@ class TestInspectSb3:
                         "v1": ["Score", 0],
                         "v2": ["Lives", 3],
                     },
-                    "costumes": [{"name": "backdrop1", "assetId": "abc", "md5ext": "abc.svg"}],
+                    "costumes": [
+                        {"name": "backdrop1", "assetId": "abc", "md5ext": "abc.svg"}
+                    ],
                     "sounds": [],
                     "blocks": {},
                 },
@@ -196,6 +204,7 @@ class TestInspectSb3:
 # ---------------------------------------------------------------------------
 # load_sb3_project
 # ---------------------------------------------------------------------------
+
 
 class TestLoadSb3Project:
     def test_loads_project_json(self, tmp_path):

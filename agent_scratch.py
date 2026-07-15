@@ -1,4 +1,5 @@
 import warnings
+
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic._internal")
 
 import subprocess
@@ -100,4 +101,3 @@ if __name__ == "__main__":
         agent.print_response(query, stream=True)
     else:
         run_chat_loop()
-

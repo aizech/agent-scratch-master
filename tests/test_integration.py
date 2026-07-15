@@ -14,7 +14,9 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts")
+)
 
 pytestmark = pytest.mark.integration
 
@@ -22,6 +24,7 @@ pytestmark = pytest.mark.integration
 @pytest.fixture(scope="module", autouse=True)
 def require_api_key():
     from dotenv import load_dotenv
+
     load_dotenv(Path(__file__).parent.parent / ".env")
     if not os.environ.get("OPENAI_API_KEY"):
         pytest.skip("OPENAI_API_KEY not set — skipping integration tests")
@@ -31,6 +34,7 @@ def require_api_key():
 def scratch_agent(tmp_path_factory):
     """Build an agent that writes to a temp output directory."""
     import warnings
+
     warnings.filterwarnings("ignore", category=UserWarning, module="pydantic._internal")
 
     import subprocess
@@ -46,9 +50,16 @@ def scratch_agent(tmp_path_factory):
 
     # Patch scratch_tools to use temp output dir
     import tools.scratch_tools as st_mod
+
     st_mod._OUTPUT_DIR = output_dir
 
-    from tools.scratch_tools import list_projects, load_spec, save_spec, inspect_sb3, load_sb3_project
+    from tools.scratch_tools import (
+        list_projects,
+        load_spec,
+        save_spec,
+        inspect_sb3,
+        load_sb3_project,
+    )
 
     @tool
     def run_bash(command: str) -> str:

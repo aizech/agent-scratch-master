@@ -7,7 +7,9 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts"))
+sys.path.insert(
+    0, str(Path(__file__).parent.parent / "skills" / "scratch-coder" / "scripts")
+)
 
 from generate_sb3 import (
     BUILT_IN_COSTUMES,
@@ -94,7 +96,11 @@ class TestConvertBlocksFromAgentFormat:
     def test_list_format_creates_hat(self):
         blocks_spec = {
             "script1": [
-                {"opcode": "motion_movesteps", "inputs": {"STEPS": [4, 10]}, "fields": {}},
+                {
+                    "opcode": "motion_movesteps",
+                    "inputs": {"STEPS": [4, 10]},
+                    "fields": {},
+                },
             ]
         }
         blocks = convert_blocks_from_agent_format(blocks_spec)
@@ -124,15 +130,24 @@ class TestConvertBlocksFromAgentFormat:
     def test_chain_linked(self):
         blocks_spec = {
             "s": [
-                {"opcode": "motion_movesteps", "inputs": {"STEPS": [4, 5]}, "fields": {}},
-                {"opcode": "motion_turnright", "inputs": {"DEGREES": [4, 15]}, "fields": {}},
+                {
+                    "opcode": "motion_movesteps",
+                    "inputs": {"STEPS": [4, 5]},
+                    "fields": {},
+                },
+                {
+                    "opcode": "motion_turnright",
+                    "inputs": {"DEGREES": [4, 15]},
+                    "fields": {},
+                },
             ]
         }
         blocks = convert_blocks_from_agent_format(blocks_spec)
         stack_blocks = [b for b in blocks.values() if not b.get("topLevel")]
         assert len(stack_blocks) == 2
         first_id = next(
-            bid for bid, b in blocks.items()
+            bid
+            for bid, b in blocks.items()
             if not b.get("topLevel") and b["opcode"] == "motion_movesteps"
         )
         assert blocks[first_id]["next"] is not None
@@ -165,11 +180,7 @@ class TestCreateProject:
         assert "semver" in project["meta"]
 
     def test_layer_order_unique(self):
-        spec = {
-            "sprites": [
-                {"name": f"S{i}", "costume": "cat"} for i in range(3)
-            ]
-        }
+        spec = {"sprites": [{"name": f"S{i}", "costume": "cat"} for i in range(3)]}
         project = create_project(spec)
         orders = [t["layerOrder"] for t in project["targets"]]
         assert len(orders) == len(set(orders))
@@ -177,25 +188,23 @@ class TestCreateProject:
 
 class TestGetRequiredAssets:
     def test_collects_costume_assets(self):
-        project = create_project(
-            {"sprites": [{"name": "Cat", "costume": "cat"}]}
-        )
+        project = create_project({"sprites": [{"name": "Cat", "costume": "cat"}]})
         assets = get_required_assets(project)
         assert "bcf454acf82e4504149f7ffe07081dbc.svg" in assets
 
     def test_collects_sound_assets(self):
-        project = {"targets": [{"costumes": [], "sounds": [
-            {"assetId": "abc", "md5ext": "abc.wav"}
-        ]}]}
+        project = {
+            "targets": [
+                {"costumes": [], "sounds": [{"assetId": "abc", "md5ext": "abc.wav"}]}
+            ]
+        }
         assets = get_required_assets(project)
         assert "abc.wav" in assets
 
 
 class TestSaveSb3:
     def test_creates_zip(self, tmp_path):
-        project = create_project(
-            {"sprites": [{"name": "Cat", "costume": "cat"}]}
-        )
+        project = create_project({"sprites": [{"name": "Cat", "costume": "cat"}]})
         out = tmp_path / "test.sb3"
         result = save_sb3(project, out)
         assert result == out

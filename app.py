@@ -1,5 +1,6 @@
 import base64
 import warnings
+
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic._internal")
 
 import subprocess
@@ -25,9 +26,11 @@ st.set_page_config(
 # Lazy-import agent so Streamlit doesn't reload it on every rerun
 # ---------------------------------------------------------------------------
 
+
 @st.cache_resource(show_spinner="Loading Scratch Agent…")
 def get_agent():
     import warnings
+
     warnings.filterwarnings("ignore", category=UserWarning, module="pydantic._internal")
 
     from agno.models.openai import OpenAIChat
@@ -87,8 +90,8 @@ def get_agent():
             "5. Use 'xy-grid' for backdrops (it's the only built-in backdrop available)",
             "6. Variables must be defined in stage.variables, not in sprite blocks directly",
             "7. Each block needs: opcode, next, parent, inputs, fields, shadow, topLevel",
-            "8. Number inputs: [1, [4, \"10\"]] where 4=positive number, 5=positive int, 6=int, 10=string",
-            "9. Block references in inputs: [2, \"block_id\"] for normal refs, [3, \"block_id\", [shadow]] for obscured",
+            '8. Number inputs: [1, [4, "10"]] where 4=positive number, 5=positive int, 6=int, 10=string',
+            '9. Block references in inputs: [2, "block_id"] for normal refs, [3, "block_id", [shadow]] for obscured',
         ],
         markdown=True,
     )
@@ -99,7 +102,9 @@ def get_agent():
 # ---------------------------------------------------------------------------
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []  # list of {"role": "user"|"assistant", "content": str}
+    st.session_state.messages = (
+        []
+    )  # list of {"role": "user"|"assistant", "content": str}
 
 if "last_output_snapshot" not in st.session_state:
     st.session_state.last_output_snapshot = set()
@@ -133,7 +138,7 @@ with st.sidebar:
                 f'<a href="data:application/zip;base64,{b64}" '
                 f'download="{sb3.name}" '
                 f'style="font-size:0.85rem;text-decoration:none;">'
-                f'⬇ {sb3.name}</a>'
+                f"⬇ {sb3.name}</a>"
             )
             st.markdown(href, unsafe_allow_html=True)
     else:
@@ -219,7 +224,7 @@ if user_input:
             href = (
                 f'<a href="data:application/zip;base64,{b64}" '
                 f'download="{name}" style="text-decoration:none;">'
-                f'⬇ Download <strong>{name}</strong></a>'
+                f"⬇ Download <strong>{name}</strong></a>"
             )
             st.success(f"✅ New project ready: `{name}`")
             st.markdown(href, unsafe_allow_html=True)
